@@ -34,7 +34,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
                 id: take.id,
                 title: take.title,
                 createdAtTimeStamp: take.createdAt.millisecondsSinceEpoch,
-                roundsCount: take.roundsCount))
+                roundsCount: take.roundsCount,
+                bowType: take.bowType))
             .toList()));
   }
 
@@ -47,7 +48,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
           TakeState(
               id: take.id,
               title: take.title,
-              createdAtTimeStamp: take.createdAt.millisecondsSinceEpoch)
+              createdAtTimeStamp: take.createdAt.millisecondsSinceEpoch,
+              bowType: take.bowType)
         ],
         rounds: take.rounds
             .map((round) => RoundState(

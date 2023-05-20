@@ -1,4 +1,3 @@
-import 'package:archery/domain/value-objects/round.state.dart';
 import 'package:archery/domain/value-objects/take.state.dart';
 import 'package:archery/domain/value-objects/target.dart';
 import 'package:archery/ui/bloc/history/history.bloc.dart';
@@ -67,9 +66,6 @@ class DetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle cardTitleStyle =
-        const TextStyle(color: Colors.amber, fontSize: 20);
-
     listRounds(context);
 
     return BlocBuilder<HistoryBloc, HistoryState>(
@@ -82,6 +78,8 @@ class DetailView extends StatelessWidget {
       DateFormat formatter = DateFormat("dd-MM-yyyy");
       DateTime dateTime =
           DateTime.fromMillisecondsSinceEpoch(takeState.createdAtTimeStamp);
+
+      print("${takeState.bowType}");
 
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
@@ -182,6 +180,18 @@ class DetailView extends StatelessWidget {
                     width: 10,
                   ),
                   Text("${state.totalScore.toString()} points")
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.type_specimen),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text("Bow: ${takeState.bowType.name}")
                 ],
               ),
             ]),

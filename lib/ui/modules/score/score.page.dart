@@ -2,6 +2,7 @@ import 'package:archery/ui/bloc/score/score.bloc.dart';
 import 'package:archery/infrastructure/repositories/rounds.repository.dart';
 import 'package:archery/ui/modules/score/components/round_input.dart';
 import 'package:archery/ui/modules/score/components/target_input.dart';
+import 'package:archery/domain/value-objects/bow_type.dart';
 import 'package:archery/ui/modules/score/types/input_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,8 @@ class _TakeInputState extends State<TakeInput> {
   final titleController = TextEditingController();
   final roundsController = TextEditingController();
   final shotsPerRoundController = TextEditingController();
+
+  BowType bowType = BowType.none;
 
   @override
   void dispose() {
@@ -53,7 +56,8 @@ class _TakeInputState extends State<TakeInput> {
         rowsCount: rowsCount,
         shotsPerRound: shotsPerRound,
         title: titleController.text,
-        inputType: inputType));
+        inputType: inputType,
+        bowType: bowType));
   }
 
   Widget _textField(TextEditingController controller, bool enableInit,
@@ -86,6 +90,31 @@ class _TakeInputState extends State<TakeInput> {
           const SizedBox(height: 20),
           _textField(shotsPerRoundController, widget.enabled, "Shots per round",
               TextInputType.number),
+          const SizedBox(height: 20),
+          DropdownButtonFormField(
+              isExpanded: true,
+              value: bowType,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+              items: BowType.values
+                  .map((bowType) => DropdownMenuItem(
+                        value: bowType,
+                        child: Text(
+                          bowType.name,
+                          style: TextStyle(color: Colors.grey[200]),
+                        ),
+                      ))
+                  .toList(),
+              onChanged: (BowType? bowType) {
+                if (bowType == null) {
+                  return;
+                }
+                setState(() {
+                  this.bowType = bowType;
+                });
+              }),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -140,7 +169,7 @@ class ScoreView extends StatelessWidget {
     return BlocBuilder<ScoreBloc, ScoreState>(builder: (blocContext, state) {
       Widget input = state.inputType == InputType.table
           ? const RoundInput()
-          : TargetInput();
+          : const TargetInput();
 
       return Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),

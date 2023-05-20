@@ -4,6 +4,7 @@ import 'package:archery/domain/models/take.model.dart';
 import 'package:archery/domain/value-objects/round_score.dart';
 import 'package:archery/domain/value-objects/score_value.dart';
 import 'package:archery/infrastructure/repositories/rounds.repository.dart';
+import 'package:archery/domain/value-objects/bow_type.dart';
 import 'package:archery/ui/modules/score/types/input_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -51,6 +52,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
           shotsPerRound: setRoundsEvent.shotsPerRound,
           title: setRoundsEvent.title,
           inputType: setRoundsEvent.inputType,
+          bowType: setRoundsEvent.bowType,
           tableRounds: List.generate(
               setRoundsEvent.roundsCount,
               (_) => List.generate(
@@ -61,11 +63,12 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
           roundsCount: setRoundsEvent.roundsCount,
           shotsPerRound: setRoundsEvent.shotsPerRound,
           inputType: setRoundsEvent.inputType,
+          bowType: setRoundsEvent.bowType,
           title: setRoundsEvent.title,
           targetRounds: List.generate(setRoundsEvent.roundsCount, (_) => []),
           enableInitForm: false);
     }
-
+    
     emitter(newState);
   }
 
@@ -123,6 +126,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     take.title = state.title;
     take.createdAt = DateTime.now();
     take.roundsCount = state.roundsCount;
+    take.bowType = state.bowType;
 
     List<List<RoundScore>> roundsScores = state.inputType == InputType.table
         ? state.tableRounds

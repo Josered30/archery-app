@@ -15,6 +15,7 @@ class ScoreState extends Equatable {
   final String title;
 
   final InputType inputType;
+  final BowType bowType;
 
   const ScoreState(
       {this.columnsCount = 0,
@@ -26,7 +27,8 @@ class ScoreState extends Equatable {
       this.tableRounds = const [],
       this.targetRounds = const [],
       this.title = '',
-      this.inputType = InputType.none});
+      this.inputType = InputType.none,
+      this.bowType = BowType.none});
 
   ScoreState copyWith(
       {int? columnsCount,
@@ -38,7 +40,8 @@ class ScoreState extends Equatable {
       List<List<RoundScore>>? tableRounds,
       List<List<RoundScore>>? targetRounds,
       String? title,
-      InputType? inputType}) {
+      InputType? inputType,
+      BowType? bowType}) {
     return ScoreState(
         columnsCount: columnsCount ?? this.columnsCount,
         rowsCount: rowsCount ?? this.rowsCount,
@@ -49,9 +52,10 @@ class ScoreState extends Equatable {
         tableRounds: tableRounds ?? this.tableRounds,
         targetRounds: targetRounds ?? this.targetRounds,
         title: title ?? this.title,
-        inputType: inputType ?? this.inputType);
+        inputType: inputType ?? this.inputType,
+        bowType: bowType ?? this.bowType);
   }
-  
+
   @override
   List<Object?> get props => [
         columnsCount,

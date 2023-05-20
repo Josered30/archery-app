@@ -17,18 +17,24 @@ const TakeSchema = CollectionSchema(
   name: r'Take',
   id: -8882998598326293143,
   properties: {
-    r'createdAt': PropertySchema(
+    r'bowType': PropertySchema(
       id: 0,
+      name: r'bowType',
+      type: IsarType.byte,
+      enumMap: _TakebowTypeEnumValueMap,
+    ),
+    r'createdAt': PropertySchema(
+      id: 1,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
     r'roundsCount': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'roundsCount',
       type: IsarType.long,
     ),
     r'title': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'title',
       type: IsarType.string,
     )
@@ -70,9 +76,10 @@ void _takeSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.createdAt);
-  writer.writeLong(offsets[1], object.roundsCount);
-  writer.writeString(offsets[2], object.title);
+  writer.writeByte(offsets[0], object.bowType.index);
+  writer.writeDateTime(offsets[1], object.createdAt);
+  writer.writeLong(offsets[2], object.roundsCount);
+  writer.writeString(offsets[3], object.title);
 }
 
 Take _takeDeserialize(
@@ -82,10 +89,13 @@ Take _takeDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Take();
-  object.createdAt = reader.readDateTime(offsets[0]);
+  object.bowType =
+      _TakebowTypeValueEnumMap[reader.readByteOrNull(offsets[0])] ??
+          BowType.none;
+  object.createdAt = reader.readDateTime(offsets[1]);
   object.id = id;
-  object.roundsCount = reader.readLong(offsets[1]);
-  object.title = reader.readString(offsets[2]);
+  object.roundsCount = reader.readLong(offsets[2]);
+  object.title = reader.readString(offsets[3]);
   return object;
 }
 
@@ -97,15 +107,29 @@ P _takeDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTime(offset)) as P;
+      return (_TakebowTypeValueEnumMap[reader.readByteOrNull(offset)] ??
+          BowType.none) as P;
     case 1:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 2:
+      return (reader.readLong(offset)) as P;
+    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _TakebowTypeEnumValueMap = {
+  'none': 0,
+  'recurve': 1,
+  'compound': 2,
+};
+const _TakebowTypeValueEnumMap = {
+  0: BowType.none,
+  1: BowType.recurve,
+  2: BowType.compound,
+};
 
 Id _takeGetId(Take object) {
   return object.id;
@@ -196,6 +220,59 @@ extension TakeQueryWhere on QueryBuilder<Take, Take, QWhereClause> {
 }
 
 extension TakeQueryFilter on QueryBuilder<Take, Take, QFilterCondition> {
+  QueryBuilder<Take, Take, QAfterFilterCondition> bowTypeEqualTo(
+      BowType value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'bowType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Take, Take, QAfterFilterCondition> bowTypeGreaterThan(
+    BowType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'bowType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Take, Take, QAfterFilterCondition> bowTypeLessThan(
+    BowType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'bowType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Take, Take, QAfterFilterCondition> bowTypeBetween(
+    BowType lower,
+    BowType upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'bowType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Take, Take, QAfterFilterCondition> createdAtEqualTo(
       DateTime value) {
     return QueryBuilder.apply(this, (query) {
@@ -543,6 +620,18 @@ extension TakeQueryLinks on QueryBuilder<Take, Take, QFilterCondition> {
 }
 
 extension TakeQuerySortBy on QueryBuilder<Take, Take, QSortBy> {
+  QueryBuilder<Take, Take, QAfterSortBy> sortByBowType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bowType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Take, Take, QAfterSortBy> sortByBowTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bowType', Sort.desc);
+    });
+  }
+
   QueryBuilder<Take, Take, QAfterSortBy> sortByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
@@ -581,6 +670,18 @@ extension TakeQuerySortBy on QueryBuilder<Take, Take, QSortBy> {
 }
 
 extension TakeQuerySortThenBy on QueryBuilder<Take, Take, QSortThenBy> {
+  QueryBuilder<Take, Take, QAfterSortBy> thenByBowType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bowType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Take, Take, QAfterSortBy> thenByBowTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bowType', Sort.desc);
+    });
+  }
+
   QueryBuilder<Take, Take, QAfterSortBy> thenByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
@@ -631,6 +732,12 @@ extension TakeQuerySortThenBy on QueryBuilder<Take, Take, QSortThenBy> {
 }
 
 extension TakeQueryWhereDistinct on QueryBuilder<Take, Take, QDistinct> {
+  QueryBuilder<Take, Take, QDistinct> distinctByBowType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'bowType');
+    });
+  }
+
   QueryBuilder<Take, Take, QDistinct> distinctByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdAt');
@@ -655,6 +762,12 @@ extension TakeQueryProperty on QueryBuilder<Take, Take, QQueryProperty> {
   QueryBuilder<Take, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Take, BowType, QQueryOperations> bowTypeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'bowType');
     });
   }
 

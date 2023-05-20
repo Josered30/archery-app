@@ -29,6 +29,8 @@ class RoundsRepository implements RoundIRepository {
   @override
   Future<void> saveTake(
       Take take, List<Round> rounds, List<List<Score>> roundsScores) async {
+    print("${take.bowType}");
+
     await isar.writeTxn(() async {
       List<List<Score>> newRoundsScores = List.empty(growable: true);
 
