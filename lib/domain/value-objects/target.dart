@@ -38,7 +38,7 @@ class Target {
     double offset = 1;
     double layerOffset = 1 / layers;
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < colors.length; ++i) {
       targetLayers.add(
           TargetLayer(radius: radius * offset, color: colors[(i / 2).floor()]));
       offset -= layerOffset;
