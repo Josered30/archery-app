@@ -9,6 +9,7 @@ import 'package:equatable/equatable.dart';
 part 'events/history.event.dart';
 part 'events/list-rounds.event.dart';
 part 'events/list-takes.event.dart';
+part 'events/delete-take.event.dart';
 part 'state/history.state.dart';
 
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
@@ -19,6 +20,20 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
         super(const HistoryState()) {
     on<ListTakesEvent>(_onListTakes);
     on<ListRoundEvent>(_onListRounds);
+    on<DeleteTakeEvent>(_onDeleteTake);
+  }
+
+  Future<void> _onDeleteTake(
+      DeleteTakeEvent deleteTakeEvent, Emitter<HistoryState> emitter) async {
+    await _roundRepository.deleteTake(deleteTakeEvent.id);
+
+    int takeIndex =
+        state.takes.indexWhere((take) => take.id == deleteTakeEvent.id);
+
+    List<TakeState> newTakes = List.from(state.takes);
+    newTakes.removeAt(takeIndex);
+
+    emitter(state.copyWith(takes: newTakes));
   }
 
   Future<void> _onListTakes(

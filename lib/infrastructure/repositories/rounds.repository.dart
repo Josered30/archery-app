@@ -96,4 +96,11 @@ class RoundsRepository implements RoundIRepository {
         await isar.takes.where().offset(offset).limit(count).findAll();
     return takes;
   }
+
+  @override
+  Future<void> deleteTake(int id) async {
+    await isar.writeTxn(() async {
+      await isar.takes.delete(id);
+    });
+  }
 }

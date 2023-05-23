@@ -44,6 +44,11 @@ class HistoryView extends StatelessWidget {
             )));
   }
 
+  void deleteTake(BuildContext context, int id) {
+    HistoryBloc historyBloc = context.read<HistoryBloc>();
+    historyBloc.add(DeleteTakeEvent(id: id));
+  }
+
   @override
   Widget build(BuildContext context) {
     listTakes(context);
@@ -54,11 +59,15 @@ class HistoryView extends StatelessWidget {
               child: ListView.builder(
                   itemCount: state.takes.length,
                   itemBuilder: (builderContext, index) => TakeCard(
+                        key: ValueKey(index),
                         title: state.takes[index].title,
                         subtitle: "${state.takes[index].roundsCount} round(s)",
                         onTap: () {
                           navigateToDetail(builderContext,
                               state.takes[index].id, state.takes[index].title);
+                        },
+                        onDelete: () {
+                          deleteTake(blocContext, state.takes[index].id);
                         },
                       )),
             ));

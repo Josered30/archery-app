@@ -8,4 +8,5 @@ abstract class RoundIRepository {
   Future<Take> getLastTake();
   Future<Take> getTakeById(int id);
   Future<List<Take>> listTakes(int count, int offset);
+  Future<void> deleteTake(int id);
 }
