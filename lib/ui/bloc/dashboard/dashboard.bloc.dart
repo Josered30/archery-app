@@ -23,7 +23,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       Emitter<DashboardState> emitter) async {
     try {
       Take take = await _roundsRepository.getLastTake();
-      
+
       emitter(state.copyWith(
           lastTakeState: TakeState(
               title: take.title,
@@ -40,6 +40,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
               .toList()));
     } catch (error) {
       print(error.toString());
+      emitter(state.copyWith(
+          lastTakeState: null, lastTakeRoundStates: List.empty()));
     }
   }
 }

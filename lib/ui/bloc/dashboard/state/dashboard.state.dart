@@ -2,7 +2,7 @@ part of 'package:archery/ui/bloc/dashboard/dashboard.bloc.dart';
 
 class DashboardState extends Equatable {
   final List<RoundState> lastTakeRounds;
-  final TakeState lastTake;
+  final TakeState? lastTake;
 
   const DashboardState(
       {this.lastTake = const TakeState(), this.lastTakeRounds = const []});
@@ -10,7 +10,7 @@ class DashboardState extends Equatable {
   DashboardState copyWith(
       {TakeState? lastTakeState, List<RoundState>? lastTakeRoundStates}) {
     return DashboardState(
-        lastTake: lastTakeState ?? lastTake,
+        lastTake: lastTakeState,
         lastTakeRounds: lastTakeRoundStates ?? lastTakeRounds);
   }
 

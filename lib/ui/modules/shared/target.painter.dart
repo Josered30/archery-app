@@ -46,7 +46,7 @@ class TargetPainter extends CustomPainter {
     final greyPointPaint = Paint()
       ..strokeWidth = 10
       ..strokeCap = StrokeCap.round
-      ..color = Colors.grey[700] as Color;
+      ..color = Colors.grey[200] as Color;
 
     List<RoundScore> normalizedRoundScores = roundScores
         .map((roundScore) => RoundScore(
@@ -60,7 +60,7 @@ class TargetPainter extends CustomPainter {
         .toList(growable: true);
 
     TextStyle textStyle = TextStyle(
-      color: Colors.grey[900],
+      color: Colors.grey[200],
       fontSize: 16,
     );
 
@@ -80,7 +80,7 @@ class TargetPainter extends CustomPainter {
         maxWidth: size.width,
       );
 
-      Offset offset = Offset(roundScore.dx + 5, roundScore.dy - 15);
+      Offset offset = Offset(roundScore.dx + 10, roundScore.dy - 15);
       textPainter.paint(canvas, offset);
     }
 

@@ -79,8 +79,6 @@ class DetailView extends StatelessWidget {
       DateTime dateTime =
           DateTime.fromMillisecondsSinceEpoch(takeState.createdAtTimeStamp);
 
-      print("${takeState.bowType}");
-
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
           padding: const EdgeInsets.all(20),

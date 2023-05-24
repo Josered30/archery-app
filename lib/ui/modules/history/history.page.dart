@@ -36,10 +36,12 @@ class HistoryView extends StatelessWidget {
               child: LayoutPage(
                 showBottomBar: false,
                 title: title,
-                child: DetailPage(
-                  key: UniqueKey(),
-                  takeId: takeId,
-                ),
+                children: [
+                  DetailPage(
+                    key: UniqueKey(),
+                    takeId: takeId,
+                  )
+                ],
               ),
             )));
   }

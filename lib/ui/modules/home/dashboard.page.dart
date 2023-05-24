@@ -36,28 +36,35 @@ class DashboardView extends StatelessWidget {
                   child: LayoutPage(
                     showBottomBar: false,
                     title: "Score",
-                    child: ScorePage(
-                      key: UniqueKey(),
-                    ),
+                    children: [
+                      ScorePage(
+                        key: UniqueKey(),
+                      )
+                    ],
                   ),
                 )))
-        .then((value) => updateLastTake(context));
+        .then((value) => updateLastTake(context, null));
   }
 
   void navigateToHistory(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (routeContext) => RepositoryProvider(
-              create: (createContext) {
-                return context.read<RoundsRepository>();
-              },
-              child: LayoutPage(
-                showBottomBar: false,
-                title: "History",
-                child: HistoryPage(
-                  key: UniqueKey(),
-                ),
-              ),
-            )));
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+            builder: (routeContext) => RepositoryProvider(
+                  create: (createContext) {
+                    return context.read<RoundsRepository>();
+                  },
+                  child: LayoutPage(
+                    showBottomBar: false,
+                    title: "History",
+                    children: [
+                      HistoryPage(
+                        key: UniqueKey(),
+                      )
+                    ],
+                  ),
+                )))
+        .then((value) => updateLastTake(context, null));
+    ;
   }
 
   void navigateToDetail(BuildContext context, int takeId) {
@@ -67,23 +74,27 @@ class DashboardView extends StatelessWidget {
               child: LayoutPage(
                 showBottomBar: false,
                 title: "Detail",
-                child: DetailPage(
-                  key: UniqueKey(),
-                  takeId: takeId,
-                ),
+                children: [
+                  DetailPage(
+                    key: UniqueKey(),
+                    takeId: takeId,
+                  )
+                ],
               ),
             )));
   }
 
-  Future<void> updateLastTake(BuildContext context) async {
+  Future<void> updateLastTake(BuildContext context, Duration? delay) async {
     DashboardBloc dashboardBloc = context.read<DashboardBloc>();
-    await Future.delayed(const Duration(seconds: 2));
+    if (delay != null) {
+      await Future.delayed(delay);
+    }
     dashboardBloc.add(UpdateLastTakeEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    updateLastTake(context);
+    updateLastTake(context, const Duration(milliseconds: 500));
 
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (blocContext, state) => Padding(
@@ -94,12 +105,15 @@ class DashboardView extends StatelessWidget {
               children: [
                 Expanded(
                     child: TakeCard(
-                  title: state.lastTake.title.isEmpty
+                  title: state.lastTake == null
                       ? 'No records'
-                      : state.lastTake.title,
+                      : state.lastTake!.title,
                   subtitle: "Total: ${state.totalScore} points",
                   onTap: () {
-                    navigateToDetail(blocContext, state.lastTake.id);
+                    if (state.lastTake == null) {
+                      return;
+                    }
+                    navigateToDetail(blocContext, state.lastTake!.id);
                   },
                 )),
               ],

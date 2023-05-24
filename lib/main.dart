@@ -1,4 +1,5 @@
 import 'package:archery/infrastructure/repositories/rounds.repository.dart';
+import 'package:archery/ui/modules/home/configuration.page.dart';
 import 'package:archery/ui/modules/home/dashboard.page.dart';
 import 'package:archery/ui/modules/layouts/layout.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,13 @@ class MyApp extends StatelessWidget {
         ],
         child: const LayoutPage(
           title: "Dashboard",
-          child: DashboardPage(),
+          animate: true,
+          bottomNavigationBarItems: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.adjust), label: "Configuration")
+          ],
+          children: [DashboardPage(), ConfigurationPage()],
         ),
       ),
     );
